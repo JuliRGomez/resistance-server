@@ -9,16 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       token: {
-        type: Sequelize.STRING
+        type: Sequelize.UUID
       },
       expirationDate: {
         type: Sequelize.DATE
       },
       userId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id"
+        references:{
+            model:'users',
+            key:'id'
         }
       },
       active: {
