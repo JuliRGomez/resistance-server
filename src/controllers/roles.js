@@ -1,4 +1,4 @@
-import {Roles, UserRoles} from "../models/";
+import {Roles, UserRoles, Users} from "../models/";
 
 export const addRol = async (req, res) => {
     try {
@@ -20,13 +20,14 @@ export const addRol = async (req, res) => {
 
 export const addRolUser = async (req, res) =>{
     try {
-        const results = await UserRoles.findOne({where: {userId: req.body.id}});
-        if(results){
-            const newRol = await UsersRoles.create(req.body.userId, req.body.roleId);
-            const newRolUser = await Roles.create(req.body.name);
-            return res.status(200).json(newRolUser);
+        const idUser = await Users.findOne({where: {id: req.params.id}});
+        const idRol = await Roles.findOne({where: {id: req.params.id}});
+        if(idUser && idRol){
+            const rolUser = await UsersRoles.create(req.body);
+            
+            return res.status(200).json(rolUser);
         }else{
-            return res.status(401).json({message: "Crear un usuario"})
+            return res.status(401).json({message: "algo salió mal"})
         }
     } catch (error) {
         console.log(error);

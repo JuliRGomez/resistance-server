@@ -1,7 +1,7 @@
 import {Users, ResetTokens} from "../models";
 import bcrypt from "bcrypt";
 import {generateJWT} from "../middlewares/jwt";
-import { where } from "sequelize/types";
+
 
 export const login = async (req, res) => {
     const {email, password} = req.body;

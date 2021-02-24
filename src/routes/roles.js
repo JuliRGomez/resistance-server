@@ -4,6 +4,6 @@ import {addRol, addRolUser} from "../controllers/roles"
 const router = express.Router();
 
 
-router.post("api/v1/roles", validateJWT, addRol);
-router.post("api/v1/roles/:id", validateJWT, addRolUser);
+router.post("/api/v1/roles", addRol);
+router.post("/api/v1/users/:id/roles/:id", addRolUser);
 export default router;

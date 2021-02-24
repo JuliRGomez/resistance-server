@@ -12,7 +12,7 @@ export const generateJWT = (user) => {
 }
 
 export const validateJWT = (req, res, next) => {
-    const headerToken = req.headers["Authorization"];
+    const headerToken = req.headers.authorization;
     console.log(headerToken);
     // const token = headerToken.split(" ")[1];
     if(headerToken){
@@ -26,3 +26,12 @@ export const validateJWT = (req, res, next) => {
         res.status(401).json({message: "La validación es incorrecta"});
     }
 }
+
+// export const validateJWT = (req, res, next) => {
+//     console.log(req.body);
+//     if(!req.body) 
+//     {return res.sendStatus(401);}
+//     next();
+//     res.sendStatus(200);
+  
+// }
