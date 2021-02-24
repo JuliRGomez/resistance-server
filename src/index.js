@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import  authRouter from "./routes/auth"
-import users from "./controllers/users"
+import users from "./routes/users"
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;

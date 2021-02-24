@@ -1,4 +1,4 @@
-import JWT from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export const generateJWT = (user) => {
     const userObj = {
@@ -12,11 +12,12 @@ export const generateJWT = (user) => {
 }
 
 export const validateJWT = (req, res, next) => {
-    const headerToken = req.headers['authorization'];
-    const token = headerToken.split(" ")[1];
-    if(token){
+    const headerToken = req.headers["Authorization"];
+    console.log(headerToken);
+    // const token = headerToken.split(" ")[1];
+    if(headerToken){
         try {
-            const verify = jwt.verify(token, process.env.SECRET_KEY);
+            const verify = jwt.verify(headerToken, process.env.SECRET_KEY);
             next();
         } catch (error) {
             res.status(401).json({message: "la validacion no es correcta"})

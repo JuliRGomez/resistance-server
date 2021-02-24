@@ -1,27 +1,25 @@
-import {Users} from "../models";
-import bcryptjs from "bcryptjs";
+import {Users, ResetTokens} from "../models";
+import bcrypt from "bcrypt";
 import {generateJWT} from "../middlewares/jwt";
+import { where } from "sequelize/types";
 
 export const login = async (req, res) => {
     const {email, password} = req.body;
   try {
       let results = await Users.findOne({where: {email: email}});
-      const valid = bcryptjs.compareSync(password, results.password);
+      const valid = bcrypt.compareSync(password, results.password);
       if(valid){
           let token = generateJWT(results);
           return res.status(200).json({
             message: "Has iniciado sesion Correctamente",
             token});
         }
-        return res.status(401).json({message: "las credenciales son incorrectas"});
+        return res.status(401).json({message: "Las credenciales son incorrectas"});
   } catch (error) {
       res.json({message: "Las credenciales son incorrectas"})
   }
 }
 
-//2. Completar el registro de usuario
-// - responder con un codigo de estado fallido 400 > cuando hagan falta campos o cuando el usuario ya exista en la base de datos
-// - responder con el objeto del usuario que ha sido creado y un codigo 201 cuando el registro sea satisfactorio
 export const signUp = async (req, res) => {
     try {
         const result = await Users.findOne({where: {email: req.body.email}});
@@ -33,7 +31,7 @@ export const signUp = async (req, res) => {
         }
         else{
             const pass = req.body.password;
-            const encryptedPass = bcryptjs.hashSync(pass, 10);
+            const encryptedPass = bcrypt.hashSync(pass, 10);
             req.body.password = encryptedPass;
             const results = await Users.create(req.body);
             res.status(201).json(results);
@@ -41,4 +39,16 @@ export const signUp = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+export const resetPassword = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const updatePassword = async (req, res) => {
+    
 }
