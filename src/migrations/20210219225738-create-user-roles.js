@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
         references:{
-          model:'users',
+          model:'Users',
           key:'id'
       }
      },
@@ -18,7 +18,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
         references:{
-          model:'roles',
+          model:'Roles',
           key:'id'
                   }
       },
