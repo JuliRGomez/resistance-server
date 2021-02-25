@@ -1,6 +1,7 @@
 import {Users, ResetTokens} from "../models";
 import bcrypt from "bcrypt";
 import {generateJWT} from "../middlewares/jwt";
+import {Op} from "sequelize";
 
 
 export const login = async (req, res) => {
@@ -50,5 +51,26 @@ export const resetPassword = async (req, res) => {
 }
 
 export const updatePassword = async (req, res) => {
+    const {token, userId, password} = req.body;
+    try {
+        let tokenObj = await ResetTokens.findOne({where: {token,[Op.and]: {userId}}});
+        if(tokenObj){
+            //validar que este activo
+            //validar que el token no haya expirado
+            let validateToken = moment().isBefore(tokenObj.expirationDate);
+            if(tokenObj.active && validateToken){
+                
+            }
+        }else{
+            res.status(403).jason({
+                message: "El token es invalido o ya expiró"
+            });
+        }    
+    } catch (error) {
+        res.status(500).jason({
+            message: "Error al validar un token",
+            error
+        });
+    }
     
 }

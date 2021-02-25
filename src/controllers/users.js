@@ -5,6 +5,9 @@ export const allUsers = async (req, res) =>{
         const results = await Users.findAll();
         res.json(results);
     } catch (error) {
-        console.log(error)
+        res.status(500).json({
+            message:"Ocurrió un error al procesar tu petición",
+            error
+        });
     }
 }
