@@ -2,6 +2,9 @@ import {Users, ResetTokens} from "../models";
 import bcrypt from "bcrypt";
 import {generateJWT} from "../middlewares/jwt";
 import {Op} from "sequelize";
+import moment from "moment";
+import {v4 as uuidv4} from "uuid";
+import sendEmail from "../utils/nodemailer";
 
 
 export const login = async (req, res) => {
@@ -44,7 +47,19 @@ export const signUp = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
     try {
-        
+        let user = await Users.findOne({where: {email}});
+        if (user){
+            let userID = user.id;
+            let tokenUUID = uuidv4();
+            let resetTokenObj = {
+                token: tokenUUID,
+                expirationDate: moment().add(1, "day"),
+                userId: userID,
+                active: true
+            };
+            let results = await ResetTokens.create(resetTokenObj);
+
+        }
     } catch (error) {
         console.log(error)
     }
