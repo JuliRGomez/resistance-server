@@ -1,8 +1,9 @@
 import {users,reset_tokens} from "../models/";
-import bcrypt from "bcrypt";
+import bcrypt, { compareSync } from "bcrypt";
 import {genrateJWT} from "../middlewares/jwt";
 import {v4 as uuidv4} from "uuid";
-import {moment} from "moment";
+import moment from "moment";
+import sendEmail from "../middlewares/nodemailer"
 
 export const login = async (req,res) => {
     const {email,password} = req.body;
@@ -74,16 +75,21 @@ export const resetPass = async (req,res) => {
                 userId: user.id,
                 active: true,
             };
-            let result = reset_tokens.create(resetTokenObj);
+            let result = await reset_tokens.create(resetTokenObj);
+            console.log("result create : " + result);
             if(result){
+                
                 //emviar email
+                sendEmail();
                 return   res.status(200).json({message: "se enviara un correo electronico a la direccion"});
             }
-            return res.status(500),json({message: "error del sistema"});
+            return res.status(500).json({message: "error del sistema"});
         }
     }
     catch(error) {
-        return res.status(500),json({message: "error del sistema"});
+        console.log(error);
+        return res.status(500).json({message: "error del sistema"});3
+       
     }
 }
 
@@ -104,6 +110,6 @@ export const updatePass = async (req,res) => {
     }
     catch(error){
         console.log(error);
-        return res.status(500),json({message: "error del sistema"});
+        return res.status(500).json({message: "error del sistema"});
     }
 }
