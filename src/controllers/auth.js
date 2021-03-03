@@ -58,7 +58,7 @@ export const resetPassword = async (req, res) => {
                 active: true
             };
             let results = await ResetTokens.create(resetTokenObj);
-
+            sendEmail(user.email, tokenUUID, userID)
         }
     } catch (error) {
         console.log(error)
