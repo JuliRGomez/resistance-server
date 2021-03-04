@@ -33,15 +33,14 @@ const smtpTransport = nodemailer.createTransport({
 
 const templateEmail = fs.readFileSync(path.join(__dirname, "..", "templates", "lost_password.html"));
 
-const mailOptions = {
-    from: "julirg58.2@gmail.com",
-    to: "julirg58@gmail.com",
-    subject: "Esta es una prueba del envio de correos con nodemailer",
-    generateTextFromHTML: true,
-    html: templateEmail
-}
-
-const sendEmail = () => {
+const sendEmail = (email,token,userid) => {
+    const mailOptions = {
+        from: "julirg58.2@gmail.com",
+        to: email,
+        subject: "Esta es una prueba del envio de correos con nodemailer",
+        generateTextFromHTML: true,
+        html: `<a href="http://tuapp/reset-password?tkn=:${token}&amp;uid=:${userid}">CLICk</a>`
+    }
     smtpTransport.sendMail(mailOptions, (error, info) => {
         if(error){
             console.log(error);

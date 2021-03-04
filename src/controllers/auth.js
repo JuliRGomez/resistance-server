@@ -3,7 +3,9 @@ import bcrypt, { compareSync } from "bcrypt";
 import {genrateJWT} from "../middlewares/jwt";
 import {v4 as uuidv4} from "uuid";
 import moment from "moment";
-import sendEmail from "../middlewares/nodemailer"
+import sendEmail from "../middlewares/nodemailer";
+import {Op} from "sequelize";
+
 
 export const login = async (req,res) => {
     const {email,password} = req.body;
@@ -21,8 +23,15 @@ export const login = async (req,res) => {
                 return res.status(200).json({
                     message:"inicio de sesion correcto",
                     token: genrateJWT(userObj),
+                    
                 });
             }
+            return res.status(401).json({
+                //contraseña incorrecta
+                message: "las credenciales son incorrectas"
+            });
+        }
+        else {
             return res.status(401).json({
                 //contraseña incorrecta
                 message: "las credenciales son incorrectas"
@@ -72,15 +81,13 @@ export const resetPass = async (req,res) => {
             let resetTokenObj = {
                 token : tokenUUID,
                 expiration_date: moment().add(1,'h'),
-                userId: user.id,
+                user_id: user.id,
                 active: true,
             };
             let result = await reset_tokens.create(resetTokenObj);
-            console.log("result create : " + result);
             if(result){
-                
                 //emviar email
-                sendEmail();
+                sendEmail(email,tokenUUID,resetTokenObj.userId);
                 return   res.status(200).json({message: "se enviara un correo electronico a la direccion"});
             }
             return res.status(500).json({message: "error del sistema"});
@@ -88,23 +95,34 @@ export const resetPass = async (req,res) => {
     }
     catch(error) {
         console.log(error);
-        return res.status(500).json({message: "error del sistema"});3
-       
+        return res.status(500).json({message: "error del sistema"});
     }
 }
 
 export const updatePass = async (req,res) => {
-    const {email,password} = req.body;
-    console.log(email);
-    let hashPassword = bcrypt.hashSync(password,10);
+    const {user_id,password,token} = req.body;
+
     try {
-        let result = await users.update({ password:hashPassword }, {
-            where: {
-            email
+        const responseToken = await reset_tokens.findOne({where: {token, [Op.and]: { 
+        user_id
+            }}});
+        if (responseToken){
+            let validToken = moment().isBefore(responseToken.expirationDate);
+            if(validToken&&responseToken.active==true){
+                let hashPassword = bcrypt.hashSync(password,10);
+                let result = await users.update({ password:hashPassword }, {
+                    where: {
+                        id:user_id
+                    }
+                });
+                if(result){
+                    await reset_tokens.update({active: false}, {where: {id: responseToken.id}});
+                    return res.status(200).json({message: "contraseña actualizada correctamente "});
+                }
             }
-        });
-        if (result){
-            return res.status(200).json({message: "contraseña actualizada correctamente "});
+            else {
+                return res.status(400).json({message: "el token ha expirado o no es valido "});
+            }
         }
 
     }
