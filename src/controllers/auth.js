@@ -1,7 +1,7 @@
 import {Users, ResetTokens} from "../models";
 import bcrypt from "bcrypt";
 import {generateJWT} from "../middlewares/jwt";
-import {Op} from "sequelize";
+import {Op, where} from "sequelize";
 import moment from "moment";
 import {v4 as uuidv4} from "uuid";
 import sendEmail from "../utils/nodemailer";
@@ -46,8 +46,10 @@ export const signUp = async (req, res) => {
 }
 
 export const resetPassword = async (req, res) => {
+    const {email} = req.body;
     try {
         let user = await Users.findOne({where: {email}});
+        console.log(user);
         if (user){
             let userID = user.id;
             let tokenUUID = uuidv4();
@@ -58,10 +60,13 @@ export const resetPassword = async (req, res) => {
                 active: true
             };
             let results = await ResetTokens.create(resetTokenObj);
-            sendEmail(user.email, tokenUUID, userID)
+            sendEmail(user.email, tokenUUID, userID);
+            return res.status(200).json({message: "Se envieará un correo a tu dirección asociada a la cuenta para reestablecer la contraseña"});
         }
+        return res.status(500).json({message: "Ocurrió un error"});
     } catch (error) {
         console.log(error)
+        res.status(500).json({message: "Ocurrió un error"});
     }
 }
 
@@ -70,12 +75,14 @@ export const updatePassword = async (req, res) => {
     try {
         let tokenObj = await ResetTokens.findOne({where: {token,[Op.and]: {userId}}});
         if(tokenObj){
-            //validar que este activo
-            //validar que el token no haya expirado
             let validateToken = moment().isBefore(tokenObj.expirationDate);
             if(tokenObj.active && validateToken){
-                
+                let hashPassword = bcrypt.hashSync(password, 10);
+                await Users.update({password: hashPassword}, {where: {id: tokenObj.userId}});
+                await ResetTokens.update ({active: false}, {where: {id: tokenObj.id}})
+                res.status(200).json({message:"Se ah restablecido tu contraseña"});
             }
+            return res.status(403).json({message:"Ocurrió un error"});
         }else{
             res.status(403).jason({
                 message: "El token es invalido o ya expiró"

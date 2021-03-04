@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/api/v1/login", login);
 router.post("/api/v1/signup", signUp);
-router.put("/api/v1/reset-password", resetPassword);
-router.put("/api/v1/update-password", updatePassword);
+router.post("/api/v1/reset-password", resetPassword);
+router.post("/api/v1/update-password", updatePassword);
 
 export default router;

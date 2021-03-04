@@ -30,16 +30,16 @@ const smtpTransport = nodemailer.createTransport({
     }
 });
 
-const mailOptions = {
-    from: "egmez124@gmail.com",
-    to: "egmez124@gmail.com",
-    subject: "Esta es una prueba de nodemailer",
-    generateTextFromHTML: true,
-    html: "<b>Hola nodemailer funciona</b>"
-}
 
-const sendEmail = () => {
-    console.log(googleClientId, googleSecret);
+
+const sendEmail = (email, token, userid) => {
+    const mailOptions = {
+        from: "Resistence <egmez124@gmail.com>",
+        to: email,
+        subject: "Esta es una prueba de nodemailer",
+        generateTextFromHTML: true,
+        html: `<a href="http://tuapp/reset-password?tkn=:${token}&amp;uid=:${userid}">clic</a>`
+    }    
     smtpTransport.sendMail(mailOptions, (error, info) => {
         if(error){
             console.log(error);
