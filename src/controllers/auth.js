@@ -87,7 +87,7 @@ export const resetPass = async (req,res) => {
             let result = await reset_tokens.create(resetTokenObj);
             if(result){
                 //emviar email
-                sendEmail(email,tokenUUID,resetTokenObj.userId);
+                sendEmail(email,tokenUUID,resetTokenObj.user_id);
                 return   res.status(200).json({message: "se enviara un correo electronico a la direccion"});
             }
             return res.status(500).json({message: "error del sistema"});

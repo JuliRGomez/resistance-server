@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import {google} from "googleapis";
 import fs from "fs";
 import path from "path";
+import Handlebars from "handlebars";
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleSecret = process.env.GOOGLE_SECRET;
@@ -31,15 +32,18 @@ const smtpTransport = nodemailer.createTransport({
     }
 });
 
-const templateEmail = fs.readFileSync(path.join(__dirname, "..", "templates", "lost_password.html"));
+const templateEmail = fs.readFileSync(path.join(__dirname, "..", "templates", "lost_password.hbs"),'utf8');
+const template = Handlebars.compile(templateEmail);
+//html: `<a href="http://tuapp/reset-password?tkn=:${token}&amp;uid=:${userid}">CLICk</a>`
 
 const sendEmail = (email,token,userid) => {
+    const passwordResetAddress = `${process.env.URL_BASE}/reset-password?tkn=:${token}&amp;uid=:${userid}`;
     const mailOptions = {
         from: "julirg58.2@gmail.com",
         to: email,
-        subject: "Esta es una prueba del envio de correos con nodemailer",
+        subject: "Resetear contraseña",
         generateTextFromHTML: true,
-        html: `<a href="http://tuapp/reset-password?tkn=:${token}&amp;uid=:${userid}">CLICk</a>`
+        html: template({passwordResetAddress})
     }
     smtpTransport.sendMail(mailOptions, (error, info) => {
         if(error){
