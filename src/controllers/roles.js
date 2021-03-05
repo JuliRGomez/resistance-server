@@ -19,17 +19,19 @@ export const addRol = async (req, res) => {
 }
 
 export const addRolUser = async (req, res) =>{
+    const rolObj = {
+        userID: req.params.id,
+        rolID: req.params.idrol
+    };
     try {
-        const idUser = await Users.findOne({where: {id: req.params.id}});
-        const idRol = await Roles.findOne({where: {id: req.params.id}});
-        if(idUser && idRol){
-            const rolUser = await UsersRoles.create(req.body);
-            
-            return res.status(200).json(rolUser);
-        }else{
-            return res.status(401).json({message: "algo salió mal"})
+        if(rolObj){
+            const idUser = await UsersRoles.create(rolObj);
+            res.status(200).json({idUser});
         }
+        return res.status(400).json({message: "Ocurrió un error"});
+       
     } catch (error) {
         console.log(error);
+        return res.status(400).json({message: "Ocurrió un error", error});
     }
 }

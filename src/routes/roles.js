@@ -5,5 +5,5 @@ const router = express.Router();
 
 
 router.post("/api/v1/roles", addRol);
-router.post("/api/v1/users/:id/roles/:id", addRolUser);
+router.post("/api/v1/users/:id/roles/:idrol", addRolUser);
 export default router;
