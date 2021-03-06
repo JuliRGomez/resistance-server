@@ -1,18 +1,24 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('content_genres', {
-      genre_id: {
+    await queryInterface.createTable('content_actors', {
+      actor_id: {
+        type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'genres',
-          key: 'genre_id'
-        }
+        references:{
+          model:'actors',
+          key:'actor_id',
+        },
       },
       content_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        references:{
+          model:'contents',
+          key:'content_id',
+        },
       },
       last_update: {
         type: Sequelize.DATE
@@ -28,6 +34,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('content_genres');
+    await queryInterface.dropTable('content_actors');
   }
 };

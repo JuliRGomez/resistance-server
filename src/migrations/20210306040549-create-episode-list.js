@@ -16,10 +16,10 @@ module.exports = {
       },
       content_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'contents',
-          key: 'content_id'
-        }
+        references:{
+          model:'contents',
+          key:'content_id',
+        },
       },
       release_date: {
         type: Sequelize.STRING

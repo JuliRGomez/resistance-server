@@ -27,13 +27,21 @@ module.exports = {
         type: Sequelize.STRING
       },
       content_rating: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references:{
+          model:'content_ratings',
+          key:'content_rating_id',
+        },
       },
       total_episodes: {
         type: Sequelize.INTEGER
       },
       content_type: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references:{
+          model:'content_types',
+          key:'content_type_id',
+        },
       },
       imdb_link: {
         type: Sequelize.STRING

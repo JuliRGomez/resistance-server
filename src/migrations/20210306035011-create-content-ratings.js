@@ -9,7 +9,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       content_type_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references:{
+          model:'content_types',
+          key:'content_type_id',
+        },
       },
       name: {
         type: Sequelize.STRING

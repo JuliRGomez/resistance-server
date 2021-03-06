@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      /*this.belongsToMany(models.directors,{
-        through: "content_directors",
+      /*this.belongsToMany(models.genres,{
+        through: "content_genres",
         foreignKey: "content_id"
       });*/
     }
