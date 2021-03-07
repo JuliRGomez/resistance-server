@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      /*this.belongsToMany(models.contents,{
+      this.belongsToMany(models.contents,{
         through: "content_directors",
         foreignKey: "director_id"
-      });*/
+      });
     }
   };
   directors.init({

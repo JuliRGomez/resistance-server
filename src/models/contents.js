@@ -11,10 +11,32 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      /*this.belongsToMany(models.genres,{
+      this.belongsToMany(models.genres,{
         through: "content_genres",
         foreignKey: "content_id"
-      });*/
+      });
+
+      this.belongsToMany(models.directors,{
+        through: "content_directors",
+        foreignKey: "content_id"
+      });
+
+      this.belongsToMany(models.actors,{
+        through: "content_actors",
+        foreignKey: "content_id"
+      });
+
+      this.hasMany(models.content_types,{
+        foreignKey: "content_type_id"
+      });
+
+      this.hasMany(models.content_ratings,{
+        foreignKey: "content_rating_id"
+      });
+
+      this.hasMany(models.episode_lists,{
+        foreignKey: "episode_id"
+      });
     }
   };
   contents.init({

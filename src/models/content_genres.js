@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      /*this.belongsTo(models.contents, {
+      this.belongsTo(models.contents, {
         foreignKey: "content_id"
       });
 
       this.belongsTo(models.genres, {
         foreignKey: "genre_id"
-      });*/
+      });
     }
   };
   content_genres.init({

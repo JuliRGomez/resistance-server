@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.content_types,{
+        foreignKey: "content_type_id"
+      });
+
+      this.belongsTo(models.contents, {
+        foreignKey: "content_id"
+      });
     }
   };
   content_ratings.init({
