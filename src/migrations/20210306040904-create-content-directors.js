@@ -4,7 +4,6 @@ module.exports = {
     await queryInterface.createTable('content_directors', {
       director_id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
         allowNull: false,
         references:{
           model:'directors',
@@ -13,7 +12,6 @@ module.exports = {
       },
       content_id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
         allowNull: false,
         references:{
           model:'contents',

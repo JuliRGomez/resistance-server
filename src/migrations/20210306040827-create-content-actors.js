@@ -4,8 +4,6 @@ module.exports = {
     await queryInterface.createTable('content_actors', {
       actor_id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
-        allowNull: false,
         references:{
           model:'actors',
           key:'actor_id',
@@ -13,8 +11,6 @@ module.exports = {
       },
       content_id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
-        allowNull: false,
         references:{
           model:'contents',
           key:'content_id',

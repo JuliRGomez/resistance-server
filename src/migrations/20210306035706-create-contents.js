@@ -55,7 +55,7 @@ module.exports = {
       rating_details: {
         type: Sequelize.JSON
       },
-      lenguages: {
+      languages: {
         type: Sequelize.STRING
       },
       createdAt: {
