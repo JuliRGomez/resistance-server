@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class episode_list extends Model {
+  class episode_lists extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   };
-  episode_list.init({
+  episode_lists.init({
     season_num: DataTypes.INTEGER,
     episode_name: DataTypes.STRING,
     content_id: DataTypes.INTEGER,
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     episode_score_votes: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'episode_list',
+    modelName: 'episode_lists',
   });
-  return episode_list;
+  return episode_lists;
 };
