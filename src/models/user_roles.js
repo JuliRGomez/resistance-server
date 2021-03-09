@@ -14,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   user_roles.init({
-    user_id: DataTypes.INTEGER,
-    role_id:DataTypes.INTEGER
+    user_id:  {
+      primaryKery: true,
+      type: DataTypes.INTEGER
+    },
+    rol_id: {
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'user_roles',

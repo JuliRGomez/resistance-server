@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.reset_tokens,{
         foreignKey:"user_id"
       });
+
+      this.belongsToMany(models.roles, {
+        through: "user_roles",
+        foreignKey: "user_id"
+      });
     }
   };
   users.init({
